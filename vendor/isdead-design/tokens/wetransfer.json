@@ -1,0 +1,85 @@
+{
+  "name": "wetransfer",
+  "source": "wetransfer.com look (electric blue #409FFF field, white floating upload card, near-black text, soft 8px corners, generous spacing), original art, measured 2026-10-14",
+  "font": {
+    "sans": "Familjen Grotesk",
+    "display": "Familjen Grotesk",
+    "files": {
+      "Familjen Grotesk": "wetransfer/FamiljenGrotesk-Variable.woff2"
+    },
+    "mono": "ui-monospace, SFMono-Regular, Menlo, monospace",
+    "note": "WeTransfer's brand faces are proprietary and not shipped. Familjen Grotesk (OFL) is our lookalike: compact, slightly eccentric grotesque with a editorial feel."
+  },
+  "color": {
+    "bg": "#FFFFFF",
+    "surface": "#FFFFFF",
+    "surfaceAlt": "#F4F7FB",
+    "text": "#17181C",
+    "textMuted": "#4F535C",
+    "textSubtle": "#8A8F9A",
+    "border": "#E1E5EC",
+    "borderStrong": "#17181C",
+    "danger": "#C62828",
+    "success": "#1B7F4B",
+    "warning": "#B7791F",
+    "onPrimary": "#17181C",
+    "onAccent": "#17181C",
+    "primary": "#409FFF",
+    "primaryHover": "#2B8DF5",
+    "accent": "#409FFF",
+    "accentHover": "#2B8DF5",
+    "accentSoft": "#E1F0FF",
+    "focus": "#17181C",
+    "heroFrom": "#CFE6FF",
+    "heroMid": "#7FBBFF",
+    "heroTo": "#409FFF"
+  },
+  "radius": {
+    "xs": "4px",
+    "sm": "6px",
+    "md": "8px",
+    "lg": "12px",
+    "xl": "16px",
+    "pill": "9999px"
+  },
+  "space": {
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "5": "20px",
+    "6": "24px",
+    "8": "32px",
+    "10": "40px",
+    "12": "48px",
+    "16": "64px"
+  },
+  "shadow": {
+    "sm": "0 1px 2px rgba(23,24,28,.08)",
+    "md": "0 4px 16px rgba(23,24,28,.10)",
+    "lg": "0 16px 48px rgba(23,24,28,.16)"
+  },
+  "type": {
+    "xs": "12px",
+    "sm": "14px",
+    "md": "16px",
+    "lg": "18px",
+    "xl": "24px",
+    "2xl": "32px",
+    "3xl": "44px",
+    "4xl": "60px",
+    "weightBody": 400,
+    "weightStrong": 600,
+    "weightHeading": 600,
+    "tracking": "-0.025em",
+    "lineHeight": 1.5
+  },
+  "control": {
+    "height": "48px",
+    "heightSm": "36px",
+    "borderWidth": "1px",
+    "buttonRadius": "6px",
+    "inputRadius": "6px",
+    "cardRadius": "12px"
+  }
+}
