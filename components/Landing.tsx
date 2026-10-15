@@ -18,17 +18,29 @@ const rail: [string, React.ReactNode][] = [
 ];
 const Dn = () => <svg width="8" height="5" viewBox="0 0 8 5" aria-hidden style={{ marginLeft: 8 }}><path d="M1 1l3 3 3-3" fill="none" stroke="currentColor" strokeWidth="1.4" /></svg>;
 
-export function Landing() {
+const plans = [
+  { f: ["Share and receive up to 2 GB","10 transfers per month","Transfer expiry up to 3 days"], n: "Free", p: "$0", d: "Perfect for occasional users or anyone exploring this open-source file transfer for the first time.", s: "Enjoy 2 GB for free.", c: "Create account" },
+  { f: ["No limits on the transfer size","Unlimited transfers per month","Unlimited transfer expiration","Custom branding per transfer","Automatic malware scanning","Subscribers benefits","Recover expired transfers"], n: "Ultimate", p: "$0", d: "The ultimate choice for power users who send big files all day, every day.", s: "Free forever, no card needed.", c: "Continue", hot: true },
+  { f: ["Everything in Ultimate","Shared team workspace","Admin controls","Priority support"], n: "Teams", p: "$0", d: "Ideal for teams that need a powerful and robust file-sharing solution.", s: "Per user, free, with room to grow.", c: "Continue" },
+  { f: ["Everything in Teams","Single sign-on","Dedicated success manager","Custom retention"], n: "Enterprise", p: "Custom", d: "Our most scalable and secure solution, customizable to your needs.", s: "Priced tailored to your business.", c: "Contact us" },
+];
+export function Landing({ page }: { page?: "pricing" } = {}) {
   const [agreed, setAgreed] = useState(false);
   useEffect(() => { try { setAgreed(localStorage.getItem("wz-agreed") === "1"); } catch { /* ignore */ } }, []);
   const agree = () => { setAgreed(true); try { localStorage.setItem("wz-agreed", "1"); } catch { /* ignore */ } };
-  return <div className="wz">
+  return <div className={"wz" + (page === "pricing" ? " is-pr" : "")}>
     <aside className="wz-rail"><Link href="/" className="wz-rail__logo" aria-label="Home"><span>we</span></Link>
       <nav>{rail.map(([l, i], n) => <Link key={l} href="/login" className={n === 0 ? "on" : ""}>{i}<small>{l}</small></Link>)}</nav>
       <div className="wz-rail__bot"><button aria-label="Notifications"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0112 0v6l1.5 2h-15zM10 21h4" fill="none" stroke="#676767" strokeWidth="1.8" strokeLinejoin="round" /></svg><i>3</i></button><button aria-label="Help"><svg width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="#676767" strokeWidth="1.8" /><path d="M10 9.5a2 2 0 114 0c0 1.5-2 1.6-2 3.2M12 16v.5" fill="none" stroke="#676767" strokeWidth="1.8" strokeLinecap="round" /></svg></button><button aria-label="Collapse"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M10 12H4M7 9l-3 3 3 3M15 5v14" fill="none" stroke="#333" strokeWidth="2" strokeLinecap="round" /></svg></button></div></aside>
     <header className="wz-top"><button className="wz-burger" aria-label="Menu"><i /><i /><i /></button><Link href="/" className="wz-top__logo"><We s={30} r={9} /></Link>
       <div className="wz-pill"><button>Features<Dn /></button><Link href="/pricing">Pricing</Link><button>Use cases<Dn /></button><button>Resources<Dn /></button></div>
       <div className="wz-pill wz-pill--auth"><Link href="/login">Log in</Link><Link className="wz-dark" href="/login?mode=signup">Sign up</Link></div></header>
+    {page === "pricing" && <main className="wz-pr">
+      <h1>You’ve got the ideas,<br />we’ve got the plans</h1>
+      <p className="wz-pr__sub">Whether you’re sending big files or delivering work for clients—keep creative projects moving forward with this open-source transfer tool.</p>
+      <div className="wz-pr__tog"><b>Monthly</b><span>Yearly</span></div>
+      <div className="wz-pr__grid">{plans.map(x => <article key={x.n} className={"wz-pr__c" + (x.hot ? " hot" : "")}>{x.hot && <em>Popular</em>}{x.n === "Teams" && <em className="bc">Best for Collaboration</em>}<h2>{x.n}</h2><p>{x.d}</p><b>{x.p}</b><small>{x.s}</small><Link href="/login" className="wz-pr__b">{x.c}</Link><ul>{x.f.map(f => <li key={f}>{f}</li>)}</ul></article>)}</div>
+    </main>}
     <main className="wz-main">
       <Link href="/pricing" className="wz-look"><span>Take<br />a<br />look</span></Link>
       <p className="wz-wp"><span>WEPRESENT</span><small>by WeTransfer</small></p>
