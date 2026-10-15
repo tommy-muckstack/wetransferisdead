@@ -1,0 +1,38 @@
+/* WeTransferIsDead home: matches wetransfer.com as a first-time visitor sees it (rail, pill nav, wallpaper, terms card, promo). */
+@font-face{font-family:"IsDead Fraunces";src:url("./fonts/Fraunces-Variable.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:"IsDead Hanken";src:url("./fonts/HankenGrotesk-Variable.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
+.wz{--blue:#3767EA;--ink:#161616;font-family:"IsDead Hanken",system-ui,sans-serif;color:var(--ink);position:relative;min-height:100vh;height:900px;overflow:hidden;background:#fff}
+.wz h1,.wz h2,.wz p{margin:0}:where(.wz) a{color:inherit;text-decoration:none}
+.wz-rail{position:absolute;left:0;top:0;bottom:0;width:85px;background:#fff;z-index:3}
+.wz-rail__logo{position:absolute;left:23px;top:28px;width:42px;height:24px;display:grid;place-items:center}.wz-rail__logo span{font-family:"IsDead Fraunces",serif;font-weight:900;font-size:28px;letter-spacing:-.06em;line-height:1}
+.wz-rail nav a{position:absolute;left:16px;width:53px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:14px;gap:6px;font-size:11px;font-weight:600;border-radius:12px}
+.wz-rail nav a:nth-child(1){top:84px;color:var(--blue)}.wz-rail nav a:nth-child(2){top:166px}.wz-rail nav a:nth-child(3){top:248px}.wz-rail nav a:nth-child(4){top:330px}.wz-rail nav a:nth-child(5){top:412px}
+.wz-rail nav small{font-size:11px;font-weight:600;line-height:1}.wz-rail nav a:not(.on){color:#000}
+.wz-rail__bot button{position:absolute;left:23px;width:40px;height:40px;border-radius:12px;border:0;background:#F9F9F9;display:grid;place-items:center;cursor:pointer}.wz-rail__bot button:nth-child(1){top:736px}.wz-rail__bot button:nth-child(2){top:788px}.wz-rail__bot button:nth-child(3){top:840px}
+.wz-rail__bot i{position:absolute;right:-5px;top:-4px;background:#F2645A;color:#fff;border-radius:10px;font-size:10px;width:20px;height:20px;display:grid;place-items:center;font-style:normal;font-weight:700}
+.wz-top{position:absolute;left:85px;right:0;top:0;height:80px;z-index:2}
+.wz-top__logo,.wz-burger{display:none}
+.wz-pill{position:absolute;top:16px;height:48px;border-radius:12px;background:#fff;border:1px solid #e8eaf0;display:flex;align-items:center;font-size:14px;font-weight:500;color:#353535;white-space:nowrap}
+.wz-pill:not(.wz-pill--auth){left:756px;width:410px;padding:0 0 0 0}.wz-pill>*{height:48px;display:inline-flex;align-items:center;padding:0 12px;border:0;background:transparent;font:inherit;color:inherit;cursor:pointer}
+.wz-pill:not(.wz-pill--auth)>*:first-child{padding-left:24px}
+.wz-pill--auth{left:1174px;width:166px;padding:0 8px}.wz-pill--auth>*{padding:0 12px}.wz-pill--auth .wz-dark{height:32px;background:#353535;color:#f1f1f1;border-radius:8px;padding:0 12px}
+.wz-main{position:absolute;left:85px;right:0;top:0;bottom:0;background:#D6D6D6}
+.wz-look{position:absolute;left:0;top:0;width:85px;height:85px;border-radius:50%;background:#000;color:#fff;display:grid;place-items:center;text-align:center;font-size:14px;line-height:14px;z-index:4;margin-left:-0px}
+.wz-wp{position:absolute;left:140px;top:134px;text-align:center;display:grid;gap:2px}.wz-wp span{font-family:"IsDead Fraunces",serif;font-weight:400;font-size:27px;letter-spacing:-.05em;line-height:1.1;transform:scaleX(.9);display:block}.wz-wp small{font-size:14px;letter-spacing:-.01em;font-weight:500}
+.wz-card{position:absolute;left:80px;top:245px;width:280px;height:410px;background:#fff;border-radius:24px;box-shadow:0 4px 24px rgba(30,40,90,.08);padding:30px;box-sizing:border-box}
+.wz-we{display:inline-grid;place-items:center;background:#111;color:#fff;font-family:"IsDead Fraunces",serif;font-weight:900;letter-spacing:-.06em;line-height:1}
+.wz-card h1{font-size:31px;line-height:34.1px;font-weight:300;letter-spacing:-.005em;margin-top:22px}.wz-card h1 b{font-family:"IsDead Fraunces",serif;font-weight:900;letter-spacing:-.02em}.wz-m{display:none}
+.wz-card p{font-size:16px;line-height:24px;color:#464646;margin-top:63px;width:195px}.wz-card p a{text-decoration:underline}
+.wz-agree{position:absolute;left:20px;bottom:20px;width:240px;height:48px;border-radius:16px;border:0;background:var(--blue);color:#F5F8FF;font:inherit;font-weight:500;font-size:16px;cursor:pointer}
+.wz-card--up{width:400px;height:auto;max-height:790px;overflow:auto;padding:16px;top:90px;left:64px}
+.wz-photo{position:absolute;left:479px;top:165px;width:755px;margin:0}.wz-art{display:block;width:755px;height:503px;background:#000}
+.wz-photo figcaption{display:flex;justify-content:space-between;align-items:flex-start;margin-top:26px}.wz-photo b{font-family:"IsDead Fraunces",serif;font-weight:400;font-size:22px;letter-spacing:-.03em;line-height:30px}.wz-photo figcaption span{width:359px;font-size:13px;line-height:17px;color:#111}
+.wz-legal{position:absolute;right:170px;bottom:56px;display:grid;gap:3px;font-size:12px;font-weight:700;color:#346E4A;text-align:right}
+@media (max-width:760px){
+  .wz{height:844px}.wz-rail,.wz-look,.wz-wp,.wz-photo,.wz-legal,.wz-pill:not(.wz-pill--auth){display:none}
+  .wz-top{left:0;height:56px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px}.wz-burger{display:grid;gap:5px;background:transparent;border:0;padding:0}.wz-burger i{display:block;width:22px;height:2px;background:#111}.wz-top__logo{display:block;position:absolute;left:50%;transform:translateX(-50%);top:13px}
+  .wz-pill--auth{position:static;border:0;background:transparent;width:auto;height:auto;padding:0}.wz-pill--auth a:first-child{display:none}.wz-pill--auth .wz-dark{background:transparent;color:#333;font-size:14px;padding:0}
+  .wz-main{top:56px;left:0;background:#C3CCFF}.wz-card{left:19px;right:19px;width:auto;top:120px;height:430px;border-radius:16px;text-align:center;padding:36px 14px}.wz-card .wz-we{display:block;width:auto!important;height:auto!important;background:transparent;color:#111;font-size:36px!important;letter-spacing:-.045em;white-space:nowrap;margin-top:6px}.wz-top__logo .wz-we{background:transparent;color:#111;width:auto!important;height:auto!important;font-size:34px!important}.wz-card .wz-we{font-size:0!important}.wz-card .wz-we::before{content:"WeTransfer";font-size:36px}
+  .wz-card h1{margin-top:20px}.wz-d{display:none}.wz-m{display:block;font-size:32px;line-height:36px;font-weight:300;padding:0 24px}.wz-card p{width:auto;margin-top:26px;font-size:16px;line-height:19px;padding:0 26px}.wz-card p a{color:#4A67E8}.wz-agree{left:50%;transform:translateX(-50%);width:172px;bottom:18px;height:43px}
+  .wz-card--up{width:auto;top:16px;left:12px;right:12px;height:auto;max-height:none}
+}
