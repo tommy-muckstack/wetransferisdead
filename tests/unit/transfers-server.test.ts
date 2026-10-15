@@ -20,9 +20,9 @@ describe("transfers", () => {
   it("counts downloads atomically and deletes expired transfers with their files", async () => {
     const t = (await S.createTransfer("u1", [f("a", "x"), f("b", "y")], {})).transfer!; await Promise.all(Array.from({ length: 20 }, (_, i) => S.recordDownload(t.id, i % 2)));
     const g = (await S.getTransfer(t.id))!; expect(g.downloads).toBe(20); expect(g.perFile).toEqual([10, 10]);
-    const dir = path.join(process.env["ISDEAD_DATA_DIR"]!, "files", t.id); expect(fs.existsSync(dir)).toBe(true);
+    expect(await S.readFile(t, 0)).not.toBeNull();
     const p = path.join(process.env["ISDEAD_DATA_DIR"]!, "transfers", t.id + ".json"); const doc = JSON.parse(fs.readFileSync(p, "utf8")); doc.expiresAt = "2020-01-01T00:00:00.000Z"; fs.writeFileSync(p, JSON.stringify(doc));
-    expect(await S.getTransfer(t.id)).toBeNull(); expect(fs.existsSync(dir)).toBe(false);
+    expect(await S.getTransfer(t.id)).toBeNull(); expect(await S.readFile(t, 0)).toBeNull();
   });
   it("seeds the demo account once and rate-limits", async () => { const a = await S.listTransfers("demo", true); expect(a).toHaveLength(3); expect(a[0]!.files.length).toBeGreaterThan(0); expect(await S.listTransfers("demo", true)).toHaveLength(3); const now = Date.now(); expect(Array.from({ length: 5 }, () => S.rateLimited("k", 3, 1000, now))).toEqual([false, false, false, true, true]); expect(S.rateLimited("k", 3, 1000, now + 2000)).toBe(false); });
 });

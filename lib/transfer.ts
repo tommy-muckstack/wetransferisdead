@@ -1,5 +1,5 @@
 // Pure helpers for file transfers: limits, validation, naming, expiry.
-export const LIMITS = { files: 20, totalBytes: 100 * 1024 * 1024, message: 500, password: 100, name: 120 };
+export const LIMITS = { files: 20, totalBytes: (Number(process.env.NEXT_PUBLIC_MAX_UPLOAD_MB) || 100) * 1024 * 1024, message: 500, password: 100, name: 120 };
 export const EXPIRY_DAYS = [1, 3, 7] as const; export type ExpiryDays = (typeof EXPIRY_DAYS)[number];
 export type FileMeta = { name: string; size: number; type: string; stored: string };
 export type Transfer = { id: string; ownerId: string | null; message: string; files: FileMeta[]; createdAt: string; expiresAt: string; password: string | null; deleteKey: string; downloads: number; perFile: number[]; lastDownloadAt: string | null };

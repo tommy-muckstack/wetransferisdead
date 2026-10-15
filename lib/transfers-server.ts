@@ -1,11 +1,11 @@
-// Server-side transfers: metadata via lib/store.ts, file bytes on disk under <dataDir>/files/<id>/<n>.
-// Local/dev only: Vercel's disk is ephemeral and its request bodies cap at 4.5 MB, so production needs object storage with signed uploads (README "Gaps").
-import crypto from "node:crypto"; import fs from "node:fs/promises"; import path from "node:path";
+// Server-side transfers: metadata and file bytes via lib/store.ts (Firestore in production, files in dev).
+// Vercel request bodies cap at 4.5 MB, so production sets NEXT_PUBLIC_MAX_UPLOAD_MB=4. Larger transfers need object storage with signed uploads (README "Gaps").
+import crypto from "node:crypto";
 import { zipSync } from "fflate";
-import { getDoc, putDoc, delDoc, listDocs, dataDir } from "@/lib/store";
+import { getDoc, putDoc, delDoc, listDocs, putBlob, getBlob, delBlob } from "@/lib/store";
 import { LIMITS, cleanName, uniqueNames, validateUpload, genId, expiryFrom, isExpired, EXPIRY_DAYS, type Transfer } from "@/lib/transfer";
 const COL = "transfers";
-const filesDir = (id: string) => path.join(dataDir(), "files", id.replace(/[^a-z0-9]/g, ""));
+const blobId = (id: string, stored: string) => id.replace(/[^a-z0-9]/g, "") + "-" + stored;
 const chain = new Map<string, Promise<unknown>>();
 function locked<T>(k: string, fn: () => Promise<T>): Promise<T> { const prev = chain.get(k) ?? Promise.resolve(); const next = prev.then(fn, fn); chain.set(k, next.catch(() => {})); return next; }
 
@@ -20,12 +20,12 @@ export async function createTransfer(ownerId: string | null, files: { name: stri
   const bad = validateUpload(files.map(f => ({ name: f.name, size: f.bytes.length }))); if (bad) return { error: bad };
   const days = EXPIRY_DAYS.includes(opts.days as 1) ? opts.days! : 3; const pw = (opts.password ?? "").slice(0, LIMITS.password);
   let id = genId(); while (await getDoc(COL, id)) id = genId();
-  const names = uniqueNames(files.map(f => cleanName(f.name))); const dir = filesDir(id); await fs.mkdir(dir, { recursive: true });
-  const metas = []; for (let i = 0; i < files.length; i++) { await fs.writeFile(path.join(dir, String(i)), files[i]!.bytes); metas.push({ name: names[i]!, size: files[i]!.bytes.length, type: (files[i]!.type || "application/octet-stream").slice(0, 100), stored: String(i) }); }
+  const names = uniqueNames(files.map(f => cleanName(f.name)));
+  const metas = []; for (let i = 0; i < files.length; i++) { await putBlob("files", blobId(id, String(i)), files[i]!.bytes); metas.push({ name: names[i]!, size: files[i]!.bytes.length, type: (files[i]!.type || "application/octet-stream").slice(0, 100), stored: String(i) }); }
   const t: Transfer = { id, ownerId, message: (opts.message ?? "").trim().slice(0, LIMITS.message), files: metas, createdAt: new Date().toISOString(), expiresAt: expiryFrom(days), password: pw ? hashPw(pw) : null, deleteKey: crypto.randomBytes(12).toString("base64url"), downloads: 0, perFile: metas.map(() => 0), lastDownloadAt: null };
   await putDoc(COL, id, t); return { transfer: t };
 }
-export async function removeTransfer(id: string) { await delDoc(COL, id); await fs.rm(filesDir(id), { recursive: true, force: true }); }
+export async function removeTransfer(id: string) { const t = await getDoc<Transfer>(COL, id); await delDoc(COL, id); for (const m of t?.files ?? []) await delBlob("files", blobId(id, m.stored)); }
 /** Returns the transfer, or null when missing/expired (expired ones are deleted on the spot). */
 export async function getTransfer(id: string): Promise<Transfer | null> { const t = await getDoc<Transfer>(COL, id); if (!t) return null; if (isExpired(t)) { await removeTransfer(id); return null; } return t; }
 export async function listTransfers(ownerId: string, demo = false): Promise<Transfer[]> {
@@ -35,7 +35,7 @@ export async function listTransfers(ownerId: string, demo = false): Promise<Tran
   return mine.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 export const recordDownload = (id: string, index: number | null) => locked(id, async () => { const t = await getDoc<Transfer>(COL, id); if (!t) return; t.downloads++; t.lastDownloadAt = new Date().toISOString(); if (index !== null) t.perFile[index] = (t.perFile[index] ?? 0) + 1; else t.perFile = t.perFile.map(n => n + 1); await putDoc(COL, id, t); });
-export async function readFile(t: Transfer, index: number): Promise<Buffer | null> { const m = t.files[index]; if (!m) return null; try { return await fs.readFile(path.join(filesDir(t.id), m.stored)); } catch { return null; } }
+export async function readFile(t: Transfer, index: number): Promise<Buffer | null> { const m = t.files[index]; if (!m) return null; return await getBlob("files", blobId(t.id, m.stored)); }
 export async function zipAll(t: Transfer): Promise<Uint8Array | null> { const entries: Record<string, Uint8Array> = {}; for (let i = 0; i < t.files.length; i++) { const b = await readFile(t, i); if (!b) return null; entries[t.files[i]!.name] = new Uint8Array(b); } return zipSync(entries, { level: 0 }); }
 
 // crude per-process rate limit for anonymous senders
