@@ -10,11 +10,9 @@
 .wta-in{height:58px;border:1px solid #e6e6e6;border-radius:14px;padding:0 16px;font:inherit;font-size:16px;color:#111;background:#fff;outline:none;margin-bottom:9px}
 .wta-in:focus{border-color:#111}.wta-in::placeholder{color:#555}
 .wta-cta{height:48px;border:0;border-radius:12px;background:#b3c3f8;color:#fff;font:inherit;font-size:15.5px;font-weight:500;cursor:pointer;margin-bottom:7px}.wta-cta.on{background:#3767ea}.wta-cta:disabled{opacity:.7}
-.wta-code{height:48px;border:1px solid #ddd;border-radius:12px;background:#fff;color:#9a9a9a;font:inherit;font-size:15.5px;cursor:default}
 .wta-fg{margin:41px auto 0;font-size:13.5px;line-height:16px;color:#111;text-decoration:underline}
 .wta-or{display:flex;align-items:center;gap:8px;margin:35px 0 30px;font-size:14px;color:#aaa;line-height:14px}.wta-or i{flex:1;border-top:1px solid #ececec}
 .wta-prov{height:48px;margin-bottom:7px;border:1px solid #2a2a2a;border-radius:12px;background:#fff;color:#161616;font:inherit;font-size:15.5px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
-.wta-prov[aria-disabled=true]{cursor:default}
 .wta-sw{margin:26px 0 0;font-size:13.5px;line-height:16px;color:#333}.wta-sw a{color:#111;text-decoration:underline}
 .wta-demo{margin:20px auto 0;font-size:13px;background:none;border:0;padding:0;font:inherit;font-size:12px;color:#3767ea;text-decoration:underline;cursor:pointer}
 .wta-err{color:#c0362c;font-size:13px;margin:10px 0 0}.wta-ok{color:#2a7a3a;font-size:13px;margin:10px 0 0}
