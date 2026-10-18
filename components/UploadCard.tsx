@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import { BP } from "@/lib/basepath";
+import { track, EVENTS } from "@/lib/analytics";
 import { EXPIRY_DAYS, LIMITS, fileKind, formatBytes, validateUpload, type PublicTransfer } from "@/lib/transfer";
 type Done = { id: string; deleteKey: string; transfer: PublicTransfer };
 /** The whole product in one card: add files, optional message/password/expiry, send, get a link. Works signed out. */
@@ -14,17 +15,17 @@ export function UploadCard({ onDone }: { onDone?: (d: Done) => void }) {
     const bad = validateUpload(files.map(f => ({ name: f.name, size: f.size }))); if (bad) return setErr(bad); setErr(""); setPct(0);
     const fd = new FormData(); files.forEach(f => fd.append("files", f)); fd.set("message", msg); fd.set("days", String(days)); if (usePw && pw) fd.set("password", pw);
     const x = new XMLHttpRequest(); x.open("POST", `${BP}/api/transfers`); x.upload.onprogress = e => { if (e.lengthComputable) setPct(Math.round((e.loaded / e.total) * 100)); };
-    x.onload = () => { setPct(null); let j: any = {}; try { j = JSON.parse(x.responseText); } catch { /* ignore */ } if (x.status === 201) { setDone(j); onDone?.(j); } else setErr(j.error ?? "Something went wrong. Try again."); };
+    x.onload = () => { setPct(null); let j: any = {}; try { j = JSON.parse(x.responseText); } catch { /* ignore */ } if (x.status === 201) { setDone(j); onDone?.(j); track(EVENTS.app_transfer_created, { files: files.length, total_mb: Math.round(total / 1e6), expiry_days: days, password: !!(usePw && pw), has_message: !!msg.trim() }); } else setErr(j.error ?? "Something went wrong. Try again."); };
     x.onerror = () => { setPct(null); setErr("The upload failed. Check your connection and try again."); }; x.send(fd);
   };
   const reset = () => { setFiles([]); setMsg(""); setPw(""); setUsePw(false); setDone(null); setDeleted(false); setErr(""); };
-  const del = async () => { if (!done || !confirm("Delete this transfer? The link will stop working.")) return; const r = await fetch(`${BP}/api/transfers/${done.id}?key=${encodeURIComponent(done.deleteKey)}`, { method: "DELETE" }); if (r.ok) setDeleted(true); };
+  const del = async () => { if (!done || !confirm("Delete this transfer? The link will stop working.")) return; const r = await fetch(`${BP}/api/transfers/${done.id}?key=${encodeURIComponent(done.deleteKey)}`, { method: "DELETE" }); if (r.ok) { setDeleted(true); track(EVENTS.app_transfer_deleted, { via: "sent_card" }); } };
   const mail = done ? `mailto:?subject=${encodeURIComponent("Files for you")}&body=${encodeURIComponent((msg ? msg + "\n\n" : "") + `Download: ${link}\nThis link expires in ${days} day${days > 1 ? "s" : ""}.`)}` : "#";
 
   if (done) return <div className="wt-card" data-testid="sent"><div className="wt-sent"><div className="wt-check" aria-hidden>✓</div><h2>{deleted ? "Transfer deleted" : "Your files are ready"}</h2>
     {!deleted ? <><p className="ids-muted">{done.transfer.files.length} file{done.transfer.files.length > 1 ? "s" : ""} · {formatBytes(done.transfer.files.reduce((a, f) => a + f.size, 0))} · expires in {days} day{days > 1 ? "s" : ""}{done.transfer.locked ? " · password protected" : ""}</p>
-      <div className="wt-link"><input readOnly aria-label="Download link" value={link} onFocus={e => e.currentTarget.select()} data-testid="link" /><button className="ids-btn ids-btn--primary" onClick={async () => { try { await navigator.clipboard.writeText(link); } catch { /* ignore */ } setCopied(true); setTimeout(() => setCopied(false), 1500); }}>{copied ? "Copied!" : "Copy link"}</button></div>
-      <div className="tb" style={{ justifyContent: "center", marginTop: 12 }}><a className="iconbtn" href={mail}>Email it</a><a className="iconbtn" href={`${BP}/t/${done.id}`} target="_blank" rel="noreferrer">Open page</a><button className="iconbtn" onClick={del}>Delete transfer</button></div></>
+      <div className="wt-link"><input readOnly aria-label="Download link" value={link} onFocus={e => e.currentTarget.select()} data-testid="link" /><button className="ids-btn ids-btn--primary" onClick={async () => { try { await navigator.clipboard.writeText(link); } catch { /* ignore */ } setCopied(true); track(EVENTS.app_shared, { method: "copy_link", via: "sent_card" }); setTimeout(() => setCopied(false), 1500); }}>{copied ? "Copied!" : "Copy link"}</button></div>
+      <div className="tb" style={{ justifyContent: "center", marginTop: 12 }}><a className="iconbtn" href={mail} onClick={() => track(EVENTS.app_shared, { method: "email", via: "sent_card" })}>Email it</a><a className="iconbtn" href={`${BP}/t/${done.id}`} target="_blank" rel="noreferrer">Open page</a><button className="iconbtn" onClick={del}>Delete transfer</button></div></>
       : <p className="ids-muted">The link no longer works.</p>}
     <button className="ids-btn ids-btn--outline" style={{ marginTop: 20 }} onClick={reset}>Send more files</button></div></div>;
 
