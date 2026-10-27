@@ -50,7 +50,7 @@ export function Landing({ page }: { page?: "pricing" } = {}) {
           <p>To continue, please agree to our <Link href="/pricing">Terms of Service</Link>, and acknowledge our <Link href="/pricing">Privacy Policy</Link>.</p>
           <button className="wz-agree" onClick={agree}>I agree</button></>}
       </section>
-      <figure className="wz-photo"><Art /><figcaption><b>Send it. Skip the subscription.</b><span>Free, open-source file transfer with no ads for you or your recipient.</span></figcaption></figure>
+      <figure className="wz-photo"><Art /><figcaption><b>Send it. Skip the subscription.</b><span>Free, open-source file transfer. No account needed to send or receive.</span></figcaption></figure>
     </main>
     
   </div>;
