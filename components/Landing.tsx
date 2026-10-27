@@ -19,10 +19,9 @@ const rail: [string, React.ReactNode][] = [
 const Dn = () => <svg width="8" height="5" viewBox="0 0 8 5" aria-hidden style={{ marginLeft: 8 }}><path d="M1 1l3 3 3-3" fill="none" stroke="currentColor" strokeWidth="1.4" /></svg>;
 
 const plans = [
-  { f: ["Share and receive up to 2 GB","10 transfers per month","Transfer expiry up to 3 days"], n: "Free", p: "$0", d: "Perfect for occasional users or anyone exploring this open-source file transfer for the first time.", s: "Enjoy 2 GB for free.", c: "Create account" },
-  { f: ["No limits on the transfer size","Unlimited transfers per month","Unlimited transfer expiration","Custom branding per transfer","Automatic malware scanning","Subscribers benefits","Recover expired transfers"], n: "Ultimate", p: "$0", d: "The ultimate choice for power users who send big files all day, every day.", s: "Free forever, no card needed.", c: "Continue", hot: true },
-  { f: ["Everything in Ultimate","Shared team workspace","Admin controls","Priority support"], n: "Teams", p: "$0", d: "Ideal for teams that need a powerful and robust file-sharing solution.", s: "Per user, free, with room to grow.", c: "Continue" },
-  { f: ["Everything in Teams","Single sign-on","Dedicated success manager","Custom retention"], n: "Enterprise", p: "Custom", d: "Our most scalable and secure solution, customizable to your needs.", s: "Priced tailored to your business.", c: "Contact us" },
+  { f: ["Up to 20 files per transfer","Up to 4 MB per transfer on the hosted site","Links expire after 1, 3 or 7 days"], n: "Free", p: "$0", d: "Send files without an account. This open-source transfer tool is free for everyone.", s: "No account needed.", c: "Send files" },
+  { f: ["Everything in Free","A history of your transfers","Download count per transfer","Delete a link any time"], n: "Signed in", p: "$0", d: "Log in to keep track of every transfer you send.", s: "Free forever, no card needed.", c: "Log in", hot: true },
+  { f: ["Apache-2.0 on GitHub","Password-protected transfers","Zip download of everything","Self-host it to raise the size limit"], n: "Open source", p: "$0", d: "Read the code, change it, or run your own copy.", s: "Fork it, change it, ship it.", c: "Get started" },
 ];
 export function Landing({ page }: { page?: "pricing" } = {}) {
   const [agreed, setAgreed] = useState(false);
@@ -43,7 +42,7 @@ export function Landing({ page }: { page?: "pricing" } = {}) {
     </main>}
     <main className="wz-main">
       <Link href="/pricing" className="wz-look"><span>Take<br />a<br />look</span></Link>
-      <p className="wz-wp"><span>WEPRESENT</span><small>by WeTransfer</small></p>
+      <p className="wz-wp"><span>OPEN SOURCE</span><small>Apache-2.0</small></p>
       <section className={"wz-card" + (agreed ? " wz-card--up" : "")}>
         {agreed ? <UploadCard /> : <>
           <We s={42} r={13} />
@@ -51,7 +50,7 @@ export function Landing({ page }: { page?: "pricing" } = {}) {
           <p>To continue, please agree to our <Link href="/pricing">Terms of Service</Link>, and acknowledge our <Link href="/pricing">Privacy Policy</Link>.</p>
           <button className="wz-agree" onClick={agree}>I agree</button></>}
       </section>
-      <figure className="wz-photo"><Art /><figcaption><b>World Press Photo 2026</b><span>A photographer documents the resilient families living in improvised housing on the edge of town.</span></figcaption></figure>
+      <figure className="wz-photo"><Art /><figcaption><b>Send it. Skip the subscription.</b><span>Free, open-source file transfer. No account needed to send or receive.</span></figcaption></figure>
     </main>
     
   </div>;
